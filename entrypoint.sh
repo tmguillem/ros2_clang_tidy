@@ -18,5 +18,6 @@ cd ws
 source "/opt/ros/$ROS_DISTRO/setup.bash"
 colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 
-cd src
-for file in $(find -regex '.*\.\(cpp\)$'); do echo $file && clang-tidy -p ../build -header-filter='.*' -fix -fix-errors $file; done
+cd src/$project_name
+for file in $(find -regex '.*\.\(cpp\)$'); do echo $file && clang-tidy -p ../../build -header-filter='.*' -fix -fix-errors $file; done
+git diff
