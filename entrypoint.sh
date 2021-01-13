@@ -17,3 +17,5 @@ sed -i 's/GUI_FLAG = True/GUI_FLAG = False/' src/simulator/bullet_simulation/bul
 # Compile and source workspace packages
 source "/opt/ros/$ROS_DISTRO/setup.bash"
 colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+
+ls src
