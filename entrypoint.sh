@@ -22,8 +22,8 @@ cd src/$project_name
 for file in $(find -regex '.*\.\(cpp\)$'); do echo $file && clang-tidy -p ../../build -header-filter='.*' -fix -fix-errors $file; done
 
 if [[ `git status --porcelain --untracked-files=no` ]]; then
-    echo "Clang-tidy did not detect any problem"
-else
     echo "Fixes in files required. Exiting"
     exit 64
+else
+    echo "Clang-tidy did not detect any problem"
 fi
