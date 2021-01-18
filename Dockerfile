@@ -31,7 +31,7 @@ RUN pip3 install nodejs
 RUN pip3 install jupyter
 RUN pip3 install pygments==2.4.1
 
-RUN apt-get install -y clang-tidy jq
+RUN apt-get install -y rsync clang-tidy jq
 
 COPY entrypoint.sh /entrypoint.sh
 
