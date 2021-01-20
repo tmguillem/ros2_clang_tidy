@@ -21,13 +21,15 @@ colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_E
 cd src/$project_name
 
 # Get list of all cpp files to analize
-cpp_list=$(find . -regex '.*\.\(cpp\)')
-
-for file in "${cpp_list}"; do echo $file && clang-tidy -p ../../build -header-filter='.*' -fix $file; done
+for file in $(find . \( ! -path "*.github*" -a ! -path "*.git*" -a ! -path "*build*" \) -regex '.*\(cpp\)$')
+do 
+	echo $file
+	clang-tidy -p ../../build -fix $file
+done
 
 if [[ `git status --porcelain --untracked-files=no` ]]; then
     echo "Fixes in files required. Exiting"
-    exit 64
+    exit 1
 else
     echo "Clang-tidy did not detect any problem"
 fi
