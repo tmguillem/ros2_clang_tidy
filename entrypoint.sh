@@ -28,20 +28,19 @@ else
     echo "Errors will not be fixed"
     fix=""
 fi
-echo "fix: $fix"
 
 # Get list of all cpp files to analize
 if [ "$INPUT_FILES" = 'all' ]; then
     for file in $(find . \( ! -path "*.github*" -a ! -path "*.git*" -a ! -path "*build*" \) -regex '.*\(cpp\)$')
     do 
         echo "Analyzing $file"
-        clang-tidy -p ../../build $fix $file
+        clang-tidy -p ../../build $fix -quiet $file
     done
 else
     for file in $INPUT_FILES
     do
         echo "Analyzing $file"
-        clang-tidy -p ../../build $fix $file
+        clang-tidy -p ../../build $fix -quiet $file
     done
 fi
 
