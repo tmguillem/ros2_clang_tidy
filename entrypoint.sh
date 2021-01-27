@@ -37,9 +37,10 @@ if $INPUT_FILES == 'all'; then
     done
 else
     for file in $INPUT_FILES
+    do
         echo "Analyzing $file"
         clang-tidy -p ../../build $fix $file
-    do
+    done
 fi
 
 
