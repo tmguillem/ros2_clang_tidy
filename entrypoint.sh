@@ -54,10 +54,10 @@ else
     done
 fi
 
-
 if [ "$all_passed" = false ]; then
     echo "Fixes in files required. Exiting"
     exit 1
 else
     echo "Clang-tidy did not detect any problem"
+    git diff --exit-code
 fi
