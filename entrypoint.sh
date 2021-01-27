@@ -20,12 +20,28 @@ colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_E
 
 cd src/$project_name
 
+# To fix or not to fix
+if [ "$INPUT_FIX" = true ]; then
+    echo "Errors will be fixed whenever possible"
+    fix="-fix"
+else
+    fix=""
+fi
+
 # Get list of all cpp files to analize
-for file in $(find . \( ! -path "*.github*" -a ! -path "*.git*" -a ! -path "*build*" \) -regex '.*\(cpp\)$')
-do 
-	echo $file
-	clang-tidy -p ../../build -fix $file
-done
+if $INPUT_FILES == 'all'; then
+    for file in $(find . \( ! -path "*.github*" -a ! -path "*.git*" -a ! -path "*build*" \) -regex '.*\(cpp\)$')
+    do 
+        echo "Analyzing $file"
+        clang-tidy -p ../../build $fix $file
+    done
+else
+    for file in $INPUT_FILES
+        echo "Analyzing $file"
+        clang-tidy -p ../../build $fix $file
+    do
+fi
+
 
 if [[ `git status --porcelain --untracked-files=no` ]]; then
     echo "Fixes in files required. Exiting"
