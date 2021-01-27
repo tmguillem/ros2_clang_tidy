@@ -31,7 +31,7 @@ fi
 echo "fix: $fix"
 
 # Get list of all cpp files to analize
-if [ "$INPUT_FILES" = 'all']; then
+if [ "$INPUT_FILES" = 'all' ]; then
     for file in $(find . \( ! -path "*.github*" -a ! -path "*.git*" -a ! -path "*build*" \) -regex '.*\(cpp\)$')
     do 
         echo "Analyzing $file"
