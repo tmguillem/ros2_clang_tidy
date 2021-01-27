@@ -29,23 +29,33 @@ else
     fix=""
 fi
 
+all_passed=true
+
 # Get list of all cpp files to analize
 if [ "$INPUT_FILES" = 'all' ]; then
     for file in $(find . \( ! -path "*.github*" -a ! -path "*.git*" -a ! -path "*build*" \) -regex '.*\(cpp\)$')
     do 
         echo "Analyzing $file"
         clang-tidy -p ../../build $fix -quiet $file
+        retval=$?
+        if [ $retval -ne 0 ]; then
+            all_passed=false
+        fi
     done
 else
     for file in $INPUT_FILES
     do
         echo "Analyzing $file"
         clang-tidy -p ../../build $fix -quiet $file
+        retval=$?
+        if [ $retval -ne 0 ]; then
+            all_passed=false
+        fi
     done
 fi
 
 
-if [[ `git status --porcelain --untracked-files=no` ]]; then
+if [ "$all_passed" = false ]; then
     echo "Fixes in files required. Exiting"
     exit 1
 else

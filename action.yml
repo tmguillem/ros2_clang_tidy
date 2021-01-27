@@ -10,7 +10,7 @@ inputs:
     required: false
     default: false
   files:
-    description: 'Space-separated list of files (absolute directory) to be analyzed. Files must be .cpp type. 
+    description: 'Space-separated list of files (local path from project folder) to be analyzed. Files must be .cpp type. 
     All files in the repository are analyzed by default.'
     required: false
     default: 'all'
