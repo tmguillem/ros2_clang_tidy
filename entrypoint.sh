@@ -19,13 +19,12 @@ source "/opt/ros/$ROS_DISTRO/setup.bash"
 colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DBUILD_TESTING=OFF
 
 cd src/$project_name
-ls
 mv /run-clang-tidy.py .
 
 all_passed=true
 
 echo "Running script"
-time python3 /run-clang-tidy.py -p ../../build -quiet
+time python3 run-clang-tidy.py -p ../../build -quiet
 retval=$?
 if [ $retval -ne 0 ]; then
     all_passed=false
