@@ -160,7 +160,6 @@ def run_tidy(args, tmpdir, build_path, queue, lock, failed_files):
     """Takes filenames out of queue and runs clang-tidy on them."""
     while True:
         name = queue.get()
-        print("Now processing: ", name)
         invocation = get_tidy_invocation(name, args.clang_tidy_binary, args.checks,
                                          tmpdir, build_path, args.header_filter,
                                          args.allow_enabling_alpha_checkers,
@@ -234,8 +233,11 @@ def main():
                         'command line.')
     parser.add_argument('-quiet', action='store_true',
                         help='Run clang-tidy in quiet mode')
+    parser.add_argument('-directory', dest='root_dir', help='root directory for analysis')
     args = parser.parse_args()
-  
+
+    assert args.root_dir is not None
+
     db_path = 'compile_commands.json'
   
     if args.build_path is not None:
@@ -268,13 +270,13 @@ def main():
              for entry in database]
 
     # Ensure no repeated files
-    files = [x for x in files if "src/" in x]
+    files = [x for x in files if args.root_dir in x]
     files = list(set(files))
     files.sort()
 
     print("List of files to be processed:")
     for file in files:
-        print(file.split("src/")[1])
+        print(file.split(args.root_dir)[1])
 
     max_task = args.j
     if max_task == 0:
@@ -343,5 +345,4 @@ def main():
   
   
 if __name__ == '__main__':
-    print("ASDFASDFSADF")
     main()
