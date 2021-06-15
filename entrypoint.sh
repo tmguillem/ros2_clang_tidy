@@ -8,7 +8,8 @@ project_name=$(basename `git rev-parse --show-toplevel`)
 
 mkdir -p $GITHUB_WORKSPACE/ws/src/$project_name
 cd $GITHUB_WORKSPACE
-time python3 /run-clang-tidy.py -p ../../build -quiet -directory $(GITHUB_WORKSPACE)
+echo $GITHUB_WORKSPACE
+time python3 /run-clang-tidy.py -p ../../build -quiet -directory $GITHUB_WORKSPACE
 
 # Move all files inside ws/src
 rsync -aq --remove-source-files . ws/src/$project_name --exclude ws
