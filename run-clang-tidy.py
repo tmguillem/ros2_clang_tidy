@@ -235,6 +235,7 @@ def main():
                         help='Run clang-tidy in quiet mode')
     parser.add_argument('-directory', dest='root_dir', help='root directory for analysis')
     args = parser.parse_args()
+    print(args.root_dir)
 
     assert args.root_dir is not None
 
