@@ -2,6 +2,8 @@
 
 set -e
 env
+
+echo "Running script"
 python3 /run-clang-tidy.py -p ../../build -quiet
 
 project_name=$(basename `git rev-parse --show-toplevel`)
