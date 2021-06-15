@@ -274,7 +274,7 @@ def main():
 
     print("List of files to be processed:")
     for file in files:
-        print(file.split("project_ace/")[1])
+        print(file.split("src/")[1])
 
     max_task = args.j
     if max_task == 0:
