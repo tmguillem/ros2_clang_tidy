@@ -20,12 +20,38 @@ colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_E
 
 cd src/$project_name
 
+# To fix or not to fix
+if [ "$INPUT_FIX" = true ]; then
+    echo "Errors will be fixed whenever possible"
+    fix="-fix"
+else
+    echo "Errors will not be fixed"
+    fix=""
+fi
+
 all_passed=true
 
-python3 /run-clang-tidy.py -p ../../build -quiet
-retval=$?
-if [ $retval -ne 0 ]; then
-    all_passed=false
+# Get list of all cpp files to analize
+if [ "$INPUT_FILES" = 'all' ]; then
+    for file in $(find . \( ! -path "*.github*" -a ! -path "*.git*" -a ! -path "*build*" \) -regex '.*\(cpp\)$')
+    do 
+        echo "Analyzing $file"
+        clang-tidy -p ../../build $fix -quiet $file
+        retval=$?
+        if [ $retval -ne 0 ]; then
+            all_passed=false
+        fi
+    done
+else
+    for file in $INPUT_FILES
+    do
+        echo "Analyzing $file"
+        clang-tidy -p ../../build $fix -quiet $file
+        retval=$?
+        if [ $retval -ne 0 ]; then
+            all_passed=false
+        fi
+    done
 fi
 
 if [ "$all_passed" = false ]; then

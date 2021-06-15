@@ -3,8 +3,22 @@ author: 'Guillem Torrente (tmguillem)'
 description: 'Github Action that builds a ROS 2 package and executes Clang tidy in it'
 branding:
   icon: 'activity'  
-  color: blue
+  color: 'black'
+inputs:
+  fix:
+    description: 'Fix errors detected whenever possible'
+    required: false
+    default: false
+  files:
+    description: 'Space-separated list of files (local path from project folder) to be analyzed. Files must be .cpp type. 
+    All files in the repository are analyzed by default.'
+    required: false
+    default: 'all'
+
 
 runs:
   using: 'docker'
   image: 'Dockerfile'
+  args:
+    - ${{ inputs.fix }}
+    - ${{ inputs.files }}
