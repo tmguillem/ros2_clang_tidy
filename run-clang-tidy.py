@@ -268,9 +268,7 @@ def main():
              for entry in database]
 
     # Ensure no repeated files
-    for file in files:
-        print(file)
-    files = [x for x in files if "src/project_ace/" in x]
+    files = [x for x in files if "src/" in x]
     files = list(set(files))
     files.sort()
 
