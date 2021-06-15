@@ -3,9 +3,6 @@
 set -e
 env
 
-echo "Running script"
-python3 /run-clang-tidy.py -p ../../build -quiet
-
 project_name=$(basename `git rev-parse --show-toplevel`)
 
 
@@ -25,7 +22,8 @@ cd src/$project_name
 
 all_passed=true
 
-python3 /run-clang-tidy.py -p ../../build -quiet
+echo "Running script"
+time python3 /run-clang-tidy.py -p ../../build -quiet
 retval=$?
 if [ $retval -ne 0 ]; then
     all_passed=false
