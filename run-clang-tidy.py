@@ -247,6 +247,7 @@ def main():
         build_path = find_compilation_database(db_path)
   
     try:
+        print("Cling tidy binnary: ", args.clang_tidy_binary)
         invocation = [args.clang_tidy_binary, '-list-checks']
         if args.allow_enabling_alpha_checkers:
             invocation.append('-allow-enabling-analyzer-alpha-checkers')
