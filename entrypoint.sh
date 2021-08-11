@@ -19,39 +19,15 @@ source "/opt/ros/$ROS_DISTRO/setup.bash"
 colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DBUILD_TESTING=OFF
 
 cd src/$project_name
-
-# To fix or not to fix
-if [ "$INPUT_FIX" = true ]; then
-    echo "Errors will be fixed whenever possible"
-    fix="-fix"
-else
-    echo "Errors will not be fixed"
-    fix=""
-fi
+mv /run-clang-tidy.py .
 
 all_passed=true
 
-# Get list of all cpp files to analize
-if [ "$INPUT_FILES" = 'all' ]; then
-    for file in $(find . \( ! -path "*.github*" -a ! -path "*.git*" -a ! -path "*build*" \) -regex '.*\(cpp\)$')
-    do 
-        echo "Analyzing $file"
-        clang-tidy -p ../../build $fix -quiet $file
-        retval=$?
-        if [ $retval -ne 0 ]; then
-            all_passed=false
-        fi
-    done
-else
-    for file in $INPUT_FILES
-    do
-        echo "Analyzing $file"
-        clang-tidy -p ../../build $fix -quiet $file
-        retval=$?
-        if [ $retval -ne 0 ]; then
-            all_passed=false
-        fi
-    done
+echo "Running script"
+time python3 run-clang-tidy.py -p ../../build -directory $GITHUB_WORKSPACE/ws/src/$project_name -clang-tidy-binary clang-tidy-12
+retval=$?
+if [ $retval -ne 0 ]; then
+    all_passed=false
 fi
 
 if [ "$all_passed" = false ]; then
