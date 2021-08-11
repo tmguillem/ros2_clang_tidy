@@ -160,6 +160,7 @@ def check_clang_apply_replacements_binary(args):
 def apply_fixes(args, tmpdir):
     """Calls clang-apply-fixes on a given directory."""
     invocation = [args.clang_apply_replacements_binary]
+    print(tmpdir)
     if args.format:
         invocation.append("-format")
     if args.style:
