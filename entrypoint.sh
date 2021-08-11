@@ -24,7 +24,7 @@ mv /run-clang-tidy.py .
 all_passed=true
 
 echo "Running script"
-time python3 run-clang-tidy.py -p ../../build -quiet -directory $GITHUB_WORKSPACE/ws/src/$project_name -clang-tidy-binary clang-tidy-12
+time python3 run-clang-tidy.py -p ../../build -directory $GITHUB_WORKSPACE/ws/src/$project_name -clang-tidy-binary clang-tidy-12
 retval=$?
 if [ $retval -ne 0 ]; then
     all_passed=false
