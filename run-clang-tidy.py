@@ -54,12 +54,7 @@ try:
 except ImportError:
     yaml = None
 
-is_py2 = sys.version[0] == "2"
-
-if is_py2:
-    import Queue as queue
-else:
-    import queue as queue
+import queue as queue
 
 
 def find_compilation_database(path):
@@ -272,9 +267,6 @@ def main():
 
     assert args.root_dir is not None
 
-    print(args.ignored_paths)
-    raise Exception
-
     db_path = "compile_commands.json"
 
     if args.build_path is not None:
@@ -284,7 +276,7 @@ def main():
         build_path = find_compilation_database(db_path)
 
     try:
-        print("Cling tidy binnary: ", args.clang_tidy_binary)
+        print("Clang tidy binary: ", args.clang_tidy_binary)
         invocation = [args.clang_tidy_binary, "-list-checks"]
         if args.allow_enabling_alpha_checkers:
             invocation.append("-allow-enabling-analyzer-alpha-checkers")
@@ -311,6 +303,13 @@ def main():
     files = list(set(files))
     files.sort()
 
+    # Filter ignored paths
+    for ignored_path in args.ignored_paths:
+        matching = [file for file in files if ignored_path in file]
+        if len(matching) > 0:
+            # Find the non-intersection between the all-files set and the files-to-be-excluded set
+            files = list(set(matching) ^ set(files))
+
     print("List of files to be processed:")
     for file in files:
         print(file.split(args.root_dir)[1])
@@ -324,7 +323,7 @@ def main():
         check_clang_apply_replacements_binary(args)
         tmpdir = tempfile.mkdtemp()
 
-    # Build up a big regexy filter from all command line arguments.
+    # Build up a big regex filter from all command line arguments.
     file_name_re = re.compile("|".join(args.files))
 
     return_code = 0

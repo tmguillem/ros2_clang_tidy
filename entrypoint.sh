@@ -23,7 +23,7 @@ mv /run-clang-tidy.py .
 
 # Read list of ignored directories
 ignored_paths=()
-readarray -t ignored_paths < .clang-tidy-ignore
+while IFS= read -r line; do if [[ ${line::1} != "#" ]] ; then ignored_paths+=("$line"); fi; done < .clang-tidy-ignore
 echo "These directories will be ignored:"
 for path in "${ignored_paths[@]}"; do echo "$path"; done
 
