@@ -228,6 +228,7 @@ def main():
         "attempt to find a file named .clang-tidy for "
         "each source file in its parent directories.",
     )
+    parser.add_argument("-directory", dest="root_dir", help="root directory for analysis")
     parser.add_argument(
         "-header-filter",
         default=None,
@@ -244,6 +245,8 @@ def main():
             help="Create a yaml file to store suggested fixes in, "
             "which can be applied with clang-apply-replacements.",
         )
+    parser.add_argument("-ignored-paths", nargs="*", default=[".*"],
+                        help="Files in these directories will be excluded from analysis.")
     parser.add_argument("-j", type=int, default=0, help="number of tidy instances to be run in parallel.")
     parser.add_argument("files", nargs="*", default=[".*"], help="files to be processed (regex on path)")
     parser.add_argument("-fix", action="store_true", help="apply fix-its")
@@ -265,10 +268,12 @@ def main():
         help="Additional argument to prepend to the compiler " "command line.",
     )
     parser.add_argument("-quiet", action="store_true", help="Run clang-tidy in quiet mode")
-    parser.add_argument("-directory", dest="root_dir", help="root directory for analysis")
     args = parser.parse_args()
 
     assert args.root_dir is not None
+
+    print(args.ignored_paths)
+    raise Exception
 
     db_path = "compile_commands.json"
 
