@@ -3,14 +3,14 @@
 set -e
 env
 
-project_name=$(basename `git rev-parse --show-toplevel`)
+project_name=$(basename "git rev-parse --show-toplevel")
 
 
-mkdir -p $GITHUB_WORKSPACE/ws/src/$project_name
-cd $GITHUB_WORKSPACE
+mkdir -p "$GITHUB_WORKSPACE"/ws/src/"$project_name"
+cd "$GITHUB_WORKSPACE"
 
 # Move all files inside ws/src
-rsync -aq --remove-source-files . ws/src/$project_name --exclude ws
+rsync -aq --remove-source-files . ws/src/"$project_name" --exclude ws
 
 cd ws
 
@@ -18,13 +18,13 @@ cd ws
 source "/opt/ros/$ROS_DISTRO/setup.bash"
 colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DBUILD_TESTING=OFF
 
-cd src/$project_name
+cd src/"$project_name"
 mv /run-clang-tidy.py .
 
 all_passed=true
 
 echo "Running script"
-time python3 run-clang-tidy.py -p ../../build -directory $GITHUB_WORKSPACE/ws/src/$project_name -clang-tidy-binary clang-tidy-12 -clang-apply-replacements-binary clang-apply-replacements-12
+time python3 run-clang-tidy.py -p ../../build -directory "$GITHUB_WORKSPACE"/ws/src/"$project_name" -clang-tidy-binary clang-tidy-12 -clang-apply-replacements-binary clang-apply-replacements-12
 
 retval=$?
 if [ $retval -ne 0 ]; then
