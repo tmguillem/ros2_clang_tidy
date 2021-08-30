@@ -29,12 +29,24 @@ for path in "${ignored_paths[@]}"; do echo "$path"; done
 
 all_passed=true
 
+# Determine the version of clang-tidy:
+if [ "$INPUT_VERSION" == "10" ] ; then
+  clang_binary="clang-tidy"
+  clang_replacement_binary="clang-apply-replacements"
+elif [ "$INPUT_VERISON" == "12" ] ; then
+  clang_binary="clang-tidy-12"
+  clang_replacement_binary="clang-apply-replacements-12"
+else
+  printf "Expected version 10 or 12 but got %s" "$INPUT_VERISON" >&2  # write error message to stderr
+  exit 1
+fi
+
 echo "Running script"
 time python3 run-clang-tidy.py -p ../../build \
                                -directory "$GITHUB_WORKSPACE"/ws/src/"$project_name" \
                                -ignored-paths "${ignored_paths[@]}" \
-                               -clang-tidy-binary clang-tidy-12 \
-                               -clang-apply-replacements-binary clang-apply-replacements-12
+                               -clang-tidy-binary "$clang_binary" \
+                               -clang-apply-replacements-binary "$clang_replacement_binary"
 
 retval=$?
 if [ $retval -ne 0 ]; then

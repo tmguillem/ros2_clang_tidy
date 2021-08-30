@@ -4,7 +4,12 @@ description: 'Github Action that builds a ROS 2 package and executes Clang tidy 
 branding:
   icon: 'activity'  
   color: blue
-
+inputs:
+  version:
+    description: 'Specify to use either clang-tidy 10 or 12'
+    required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'
+  args:
+    - ${{ inputs.version }}
