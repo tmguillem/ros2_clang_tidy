@@ -16,7 +16,7 @@ cd ws
 
 # Compile and source workspace packages
 source "/opt/ros/$ROS_DISTRO/setup.bash"
-# colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DBUILD_TESTING=OFF
+colcon build --symlink-install --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DBUILD_TESTING=OFF
 
 cd src/"$project_name"
 mv /run-clang-tidy.py .
@@ -30,10 +30,10 @@ for path in "${ignored_paths[@]}"; do echo "$path"; done
 all_passed=true
 
 # Determine the version of clang-tidy:
-if [ "$INPUT_VERSION" == "10" ] ; then
+if [ "$INPUT_VERSION" == 10 ] ; then
   clang_binary="clang-tidy"
   clang_replacement_binary="clang-apply-replacements"
-elif [ "$INPUT_VERISON" == "12" ] ; then
+elif [ "$INPUT_VERISON" == 12 ] ; then
   clang_binary="clang-tidy-12"
   clang_replacement_binary="clang-apply-replacements-12"
 else
