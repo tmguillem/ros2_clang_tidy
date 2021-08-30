@@ -32,7 +32,7 @@ all_passed=true
 echo "Running script"
 time python3 run-clang-tidy.py -p ../../build \
                                -directory "$GITHUB_WORKSPACE"/ws/src/"$project_name" \
-                               -ignored_paths "${ignored_paths[@]}" \
+                               -ignored-paths "${ignored_paths[@]}" \
                                -clang-tidy-binary clang-tidy-12 \
                                -clang-apply-replacements-binary clang-apply-replacements-12
 
