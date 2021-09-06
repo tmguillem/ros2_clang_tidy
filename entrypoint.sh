@@ -33,10 +33,13 @@ all_passed=true
 if [ "$INPUT_VERSION" == 10 ] ; then
   clang_binary="clang-tidy"
   clang_replacement_binary="clang-apply-replacements"
+  echo "Selected clang tidy v10"
 elif [ "$INPUT_VERISON" == 12 ] ; then
   clang_binary="clang-tidy-12"
+  echo "Selected clang tidy v12"
   clang_replacement_binary="clang-apply-replacements-12"
 else
+  echo "$INPUT_VERISON"
   printf "Expected version 10 or 12 but got %s" "$INPUT_VERISON" >&2  # write error message to stderr
   exit 1
 fi
