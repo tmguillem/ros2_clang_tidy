@@ -14,6 +14,8 @@ rsync -aq --remove-source-files . ws/src/"$project_name" --exclude ws
 
 cd ws
 
+echo "$INPUT_VERISON"
+
 # Determine the version of clang-tidy:
 if [ "$INPUT_VERSION" == 10 ] ; then
   clang_binary="clang-tidy"
