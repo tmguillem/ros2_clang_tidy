@@ -17,11 +17,11 @@ cd ws
 echo $INPUT_VERISON
 
 # Determine the version of clang-tidy:
-if [ "$INPUT_VERSION" == 10 ] ; then
+if [ "$INPUT_VERSION" == 12 ] ; then
   clang_binary="clang-tidy"
   clang_replacement_binary="clang-apply-replacements"
   echo "Selected clang tidy v10"
-elif [ "$INPUT_VERISON" == 12 ] ; then
+elif [ "$INPUT_VERISON" == 10 ] ; then
   clang_binary="clang-tidy-12"
   echo "Selected clang tidy v12"
   clang_replacement_binary="clang-apply-replacements-12"
