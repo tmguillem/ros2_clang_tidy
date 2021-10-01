@@ -68,6 +68,35 @@ def find_compilation_database(path):
     return os.path.realpath(result)
 
 
+def get_header_files(database, root_dir):
+    """
+    Finds all header files in the compilation database
+    """
+
+    # Also add header files
+    included_dirs = []
+    for entry in database:
+        # Get all include commands
+        include_list = [included_dir.split(" ")[0] for included_dir in entry["command"].split("-I")]
+        # Get all included items in each include command
+        included_items = [command.split(",") for command in include_list]
+        # Flatten list of lists
+        included_dirs += [os.path.normpath(item) for sublist in included_items for item in sublist if root_dir in item]
+
+    # Ensure no repeated directories
+    included_dirs = list(set(included_dirs))
+
+    included_header_files = []
+
+    for include_dir in included_dirs:
+        additional_hpp_files = glob.glob(include_dir + "/**/*.hpp", recursive=True)
+        additional_h_files = glob.glob(include_dir + "/**/*.h", recursive=True)
+        included_header_files += additional_h_files
+        included_header_files += additional_hpp_files
+
+    return list(set(included_header_files))
+
+
 def make_absolute(f, directory):
     if os.path.isabs(f):
         return f
@@ -298,10 +327,12 @@ def main():
     database = json.load(open(os.path.join(build_path, db_path)))
     files = [make_absolute(entry["file"], entry["directory"]) for entry in database]
 
+    # Include header files
+    files += get_header_files(database, args.root_dir)
+
     # Ensure no repeated files
     files = [x for x in files if args.root_dir in x]
     files = list(set(files))
-    files.sort()
 
     # Filter ignored paths
     for ignored_path in args.ignored_paths:
@@ -309,6 +340,8 @@ def main():
         if len(matching) > 0:
             # Find the non-intersection between the all-files set and the files-to-be-excluded set
             files = list(set(matching) ^ set(files))
+
+    files.sort()
 
     print("List of files to be processed:")
     for file in files:
