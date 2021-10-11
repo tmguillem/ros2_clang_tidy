@@ -5,6 +5,17 @@ env
 
 project_name=$(basename `git rev-parse --show-toplevel`)
 
+# Determine the version of clang-tidy:
+if [ "$INPUT_VERSION" == 10 ] ; then
+  clang_binary="clang-tidy"
+  clang_replacement_binary="clang-apply-replacements"
+elif [ "$INPUT_VERSION" == 12 ] ; then
+  clang_binary="clang-tidy-12"
+  clang_replacement_binary="clang-apply-replacements-12"
+else
+  echo "Expected version 10 or 12 but got $INPUT_VERSION"
+  exit 1
+fi
 
 mkdir -p "$GITHUB_WORKSPACE"/ws/src/"$project_name"
 cd "$GITHUB_WORKSPACE"
